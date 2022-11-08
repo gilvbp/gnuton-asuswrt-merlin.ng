@@ -792,7 +792,7 @@ else ifeq ($(BUILD_NAME),MAP-AC1750)
 	cd $(INSTALLDIR)/www/require && mv menuTrees/menuTree_TRIO.js modules/menuTree.js
 else ifeq ($(BUILD_NAME),VZW-AC1300)
 	cd $(INSTALLDIR)/www/require && mv menuTrees/menuTree_VZW-AC1300.js modules/menuTree.js
-else ifeq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000 TUF-AX3000_V2 TUF-AX5400))
+else ifeq ($(RTCONFIG_TUF_UI), y)
 	cd $(INSTALLDIR)/www/require && mv menuTrees/menuTree_TUF.js modules/menuTree.js	
 else ifeq ($(RTCONFIG_BWDPI),y)
 ifeq ($(findstring $(BUILD_NAME),$(MODELS_HAVE_TRAFFIC_ANALYZER)),)
@@ -1028,7 +1028,7 @@ ifneq ($(RTCONFIG_OUTFOX), y)
 	rm -rf $(INSTALLDIR)/www/images/outfox_dark.png
 endif
 
-ifeq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000 TUF-AX3000_V2 TUF-AX5400))
+ifeq ($(RTCONFIG_TUF_UI), y)
 	cp -rf $(INSTALLDIR)/www/css/TUF/* $(INSTALLDIR)/www/css/
 	rm -rf $(INSTALLDIR)/www/css/TUF
 endif
