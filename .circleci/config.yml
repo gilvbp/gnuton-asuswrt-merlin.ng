@@ -227,7 +227,7 @@ workflows:
                 - mainline
       - build:
           name: "build_rt-ax95q"
-          model: "Xrt-ax95q"
+          model: "rt-ax95q"
           release_dir: "src-rt-5.02axhnd.675x"
           requires:
             - getcode
