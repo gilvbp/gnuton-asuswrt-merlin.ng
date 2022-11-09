@@ -240,7 +240,7 @@ workflows:
                 - mainline
       - build:
           name: "build_tuf-ax5400"
-          model: "Xtuf-ax5400"
+          model: "tuf-ax5400"
           release_dir: "src-rt-5.02axhnd.675x"
           requires:
             - getcode
