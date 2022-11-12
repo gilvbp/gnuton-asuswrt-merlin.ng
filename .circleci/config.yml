@@ -201,7 +201,7 @@ workflows:
                 - mainline
       - build:
           name: "build_dsl-ax82u"
-          model: "dsl-ax82u"
+          model: "Xdsl-ax82u"
           release_dir: "src-rt-5.02axhnd.675x"
           requires:
             - getcode
@@ -214,7 +214,7 @@ workflows:
                 - mainline
       - build:
           name: "build_rt-ax82u"
-          model: "rt-ax82u"
+          model: "Xrt-ax82u"
           release_dir: "src-rt-5.02axhnd.675x"
           requires:
             - getcode
@@ -227,7 +227,7 @@ workflows:
                 - mainline
       - build:
           name: "build_rt-ax95q"
-          model: "rt-ax95q"
+          model: "Xrt-ax95q"
           release_dir: "src-rt-5.02axhnd.675x"
           requires:
             - getcode
