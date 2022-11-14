@@ -5,11 +5,13 @@
 # Run this script after having reviewed the merge
 
 BUILD_NAME=$1
+BUILD_NAME_SMALL=$(echo $BUILD_NAME| tr '[:upper:]' '[:lower:]')
 REPO=.
 echo "*** Adding files to GIT after a GPL Merge..."
 
 if [ "$BUILD_NAME" == "RT-AX82U" ] || [ "$BUILD_NAME" == "TUF-AX5400" ] || [ "$BUILD_NAME" == "TUF-AX3000" ] || [ "$BUILD_NAME" == "RT-AX95Q" ]
 then
+    git add -f $REPO/release/src-rt-5.02axhnd.675x/router-sysdep.$BUILD_NAME_SMALL/*
     git add -f $REPO/release/src-rt-5.02axhnd.675x/wl/exe/prebuilt/*
     git add -f $REPO/release/src-rt-5.02axhnd.675x/hostTools/prebuilt/$BUILD_NAME/*
     git add -f $REPO/release/src/router/tuxera/broadcom_arm_ax_6750/*
@@ -113,6 +115,7 @@ then
 
 elif [ "$BUILD_NAME" == "DSL-AX82U" ]
 then
+    git add -f $REPO/release/src-rt-5.02axhnd.675x/router-sysdep.$BUILD_NAME_SMALL/*
     git add -f $REPO/release/src-rt-5.02axhnd.675x/wl/exe/prebuilt/*
     git add -f $REPO/release/src-rt-5.02axhnd.675x/hostTools/prebuilt/$BUILD_NAME/*
     git add -f $REPO/release/src/router/tuxera/broadcom_arm_ax_6750/*
