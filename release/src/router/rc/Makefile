@@ -299,13 +299,7 @@ CFLAGS += -I$(TOP)/sw-hw-auth
 endif
 
 ifneq ($(findstring CONFIG_BCM_KF_NETFILTER=, $(shell cat $(LINUXDIR)/.config)),)
-ifneq ($(HND_ROUTER_AX_6756),y)
 CFLAGS         += -DBCM_KF_NETFILTER
-endif
-endif
-
-ifeq ($(and $(BR63),$(NEW_SWITCH_ORDER)),y)
-CFLAGS += -DNEW_SWITCH_ORDER
 endif
 
 OBJS := rc.o init.o interface.o lan.o wireless.o wan.o pppd.o auth.o services.o
@@ -402,7 +396,7 @@ ifeq ($(RTCONFIG_BHCOST_OPT),y)
 OBJS += amas-ssd-qca.o
 endif
 ifeq ($(RTCONFIG_CONNDIAG),y)
-OBJS += $(if $(wildcard sysdeps/qca/amas-ssd-cd-qca.c),amas-ssd-cd-qca.o,prebuild/amas-ssd-cd-qca.o)
+OBJS += amas-ssd-cd-qca.o
 endif
 endif
 ifeq ($(RTCONFIG_WIFI_SON),y)
@@ -522,9 +516,9 @@ OBJS += ic.o
 endif
 
 #ifeq ($(RTCONFIG_HTTPS),y)
-#ifeq ($(RTCONFIG_FRS_FEEDBACK),y) // GNUton: Temporary fix -  https://github.com/gnuton/asuswrt-merlin.ng/issues/86
+ifeq ($(RTCONFIG_FRS_FEEDBACK),y)
 OBJS += dsl_fb.o
-#endif
+endif
 #endif
 
 #ifeq ($(RTCONFIG_FRS_LIVE_UPDATE),y)
@@ -703,7 +697,7 @@ endif
 ifeq ($(RTCONFIG_SOFTWIRE46),y)
 CFLAGS += -I$(TOP)/json-c
 LDFLAGS += -L$(TOP)/json-c/.libs -ljson-c
-OBJS += s46comm.o v6plusd.o ocnvcd.o
+OBJS += s46comm.o v6plusd.o
 endif
 
 ifeq ($(RTCONFIG_INTERNAL_GOBI),y)
@@ -803,10 +797,6 @@ endif
 ifeq ($(RTCONFIG_TC_DOWNLOAD), y)
 OBJS += tc_utils.o
 CFLAGS += -D _FILE_OFFSET_BITS=64
-endif
-
-ifeq ($(RTCONFIG_HND_ROUTER_AX),y)
-OBJS += gpy211_war.o
 endif
 
 ifeq ($(RTCONFIG_BCMARM),y)
@@ -1467,10 +1457,8 @@ ifeq ($(RTCONFIG_LETSENCRYPT),y)
 endif
 
 ifeq ($(RTCONFIG_SOFTWIRE46),y)
-	@cd $(INSTALLDIR)/sbin && ln -sf rc s46reset
 	@cd $(INSTALLDIR)/sbin && ln -sf rc mapcalc
 	@cd $(INSTALLDIR)/sbin && ln -sf rc v6plusd
-	@cd $(INSTALLDIR)/sbin && ln -sf rc ocnvcd
 endif
 
 ifeq ($(RTCONFIG_WLCSCAN_RSSI),y)
@@ -1491,7 +1479,7 @@ ifeq ($(RTCONFIG_EXTPHY_BCM84880),y)
 	@cd $(INSTALLDIR)/sbin && ln -sf rc get_ext_phy_id
 endif
 
-ifeq ($(BUILD_NAME),$(filter $(BUILD_NAME),DSL-AX82U RT-AX82U RT-AX82U_V2 GS-AX3000 GS-AX5400 TUF-AX5400 TUF-AX5400_V2 GT-AX11000_PRO GT-AXE16000 GT-AX6000 GT10))
+ifeq ($(BUILD_NAME),$(filter $(BUILD_NAME),RT-AX82U RT-AX82U_V2 GS-AX3000 GS-AX5400 TUF-AX5400 TUF-AX5400_V2 GT-AX11000_PRO GT-AXE16000 GT-AX6000 GT10))
 	@cd $(INSTALLDIR)/sbin && ln -sf rc ledg
 	@cd $(INSTALLDIR)/sbin && ln -sf rc ledbtn
 endif
@@ -1553,10 +1541,6 @@ ifeq ($(RTCONFIG_IG_SITE2SITE),y)
 	@cd $(INSTALLDIR)/sbin && ln -sf rc ig_s2s_client
 endif
 
-ifeq ($(HND_ROUTER),y)
-	@cd $(INSTALLDIR)/sbin && ln -sf rc gpy211_monitor
-endif
-
 clean:
 	rm -f rc *.o .*.depend *.prep libconn_diag.so
 ifeq ($(RTCONFIG_BRCM_HOSTAPD),y)
@@ -1568,10 +1552,10 @@ size: rc
 
 # handle prebuilt object here
 ifneq ($(wildcard ./prebuild/dsl_fb.o),)
-#ifeq ($(RTCONFIG_FRS_FEEDBACK),y) // GNUton: Temporary fix - see https://github.com/gnuton/asuswrt-merlin.ng/issues/86
+ifeq ($(RTCONFIG_FRS_FEEDBACK),y)
 dsl_fb.o:
 	@-cp -f ./prebuild/dsl_fb.o .
-#endif
+endif
 ifeq ($(RTCONFIG_DSL),y)
 ifeq ($(RTCONFIG_DSL_TCLINUX),y)
 dsl_diag.o:
@@ -1983,10 +1967,6 @@ ifneq ($(wildcard ./prebuild/v6plusd.o),)
 v6plusd.o:
 	@-cp -f ./prebuild/v6plusd.o .
 endif
-ifneq ($(wildcard ./prebuild/ocnvcd.o),)
-ocnvcd.o:
-	@-cp -f ./prebuild/ocnvcd.o .
-endif
 endif
 ifeq ($(RTCONFIG_TPVPN),y)
 ifneq ($(wildcard ./prebuild/tpvpn.o),)
@@ -2014,11 +1994,6 @@ ifneq ($(wildcard ./prebuild/ig_s2s_client.o),)
 ig_s2s_client.o:
 	@-cp -f ./prebuild/ig_s2s_client.o .
 endif
-endif
-
-ifneq ($(wildcard ./prebuild/gpy211_war.o),)
-gpy211_war.o:
-	@-cp -f ./prebuild/gpy211_war.o .
 endif
 
 %.o: %.c
