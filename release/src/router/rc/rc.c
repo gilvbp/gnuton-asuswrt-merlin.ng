@@ -450,6 +450,7 @@ static int rctest_main(int argc, char *argv[])
 	else if (strcmp(argv[1], "gpy211")==0) {
 		GPY211_INIT_SPEED();
 	}
+#if !defined(TUFAX3000)
 	else if (strcmp(argv[1], "gpy211_1g")==0) {
 		GPY211_SPEED_WAR_1G();
 	}
@@ -459,6 +460,7 @@ static int rctest_main(int argc, char *argv[])
 	else if (strcmp(argv[1], "gpy211_aneg")==0) {
 		GPY211_WAR_ANEG();
 	}
+#endif //TUFAX3000
 #endif
 #if defined(RTCONFIG_FRS_FEEDBACK)
 	else if (strcmp(argv[1], "sendfeedback")==0) {
@@ -1075,7 +1077,6 @@ static int rctest_main(int argc, char *argv[])
 				if (nvram_get_int("qos_type") == 1) {
 					start_dpi_engine_service();
 				}
-
 				else
 #endif
 				start_iQos();
@@ -2071,7 +2072,8 @@ static const applets_t applets[] = {
 #endif
 #ifdef RTCONFIG_SOFTWIRE46
 	{ "v6plusd", 			v6plusd_main			},
-	{ "ocnvcd", 			ocnvcd_main			},
+	{ "ocnvcd", 			ocnvcd_main			}, //TODO: GNUTON - remove for tuf-ax3000
+#endif
 #endif
 #if defined(RTCONFIG_RALINK) || defined(RTCONFIG_EXT_RTL8365MB) || defined(RTCONFIG_EXT_RTL8370MB) || defined(RTAX55) || defined(RTAX1800) || defined(RTAX58U_V2) || defined(RTAX3000N) || defined(BR63)
 	{ "rtkswitch",			config_rtkswitch		},
@@ -2228,7 +2230,9 @@ static const applets_t applets[] = {
 	{ "ipsec_updown",		ipsec_updown_main      },
 #endif
 #ifdef RTCONFIG_HND_ROUTER_AX
+#if !defined(TUFAX3000)
 	{ "gpy211_monitor",		gpy211_monitor_main      },
+#endif
 #endif
 	{NULL, NULL}
 };
@@ -3516,6 +3520,7 @@ int main(int argc, char **argv)
 	}
 #endif
 #if RTCONFIG_SOFTWIRE46
+    //TODO GNUTON remove -begin #if !defined(TUFAX3000)
 	else if (!strcmp(base, "s46reset")) {
 		if (argc != 2) {
 			printf("Usage: %s <wan unit>.\n", argv[0]);
@@ -3525,6 +3530,7 @@ int main(int argc, char **argv)
 		printf("WAN Unit:[%d] MAP nvarm is reset.\n", atoi(argv[1]));
 		return 0;
 	}
+    //TODO GNUTON remove - END
 	else if (!strcmp(base, "mapcalc")) {
 		char peerbuf[INET6_ADDRSTRLEN];
 		char addr6buf[INET6_ADDRSTRLEN];
@@ -3538,7 +3544,7 @@ int main(int argc, char **argv)
 			wan_proto = WAN_MAPE;
 		else if (!strcmp(argv[2], "lw4o6"))
 			wan_proto = WAN_LW4O6;
-		else if (!strcmp(argv[2], "v6plus"))
+		else if (!strcmp(argv[2], "v6plus")) //TODO GNUTON FIX
 			wan_proto = WAN_V6PLUS;
 		else
 			wan_proto = WAN_OCNVC;
