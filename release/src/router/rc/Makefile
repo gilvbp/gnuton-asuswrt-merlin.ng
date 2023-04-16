@@ -806,7 +806,9 @@ CFLAGS += -D _FILE_OFFSET_BITS=64
 endif
 
 ifeq ($(RTCONFIG_HND_ROUTER_AX),y)
+ifneq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000))
 OBJS += gpy211_war.o
+endif # BUILD_NAME
 endif
 
 ifeq ($(RTCONFIG_BCMARM),y)
@@ -1467,10 +1469,12 @@ ifeq ($(RTCONFIG_LETSENCRYPT),y)
 endif
 
 ifeq ($(RTCONFIG_SOFTWIRE46),y)
-	@cd $(INSTALLDIR)/sbin && ln -sf rc s46reset
 	@cd $(INSTALLDIR)/sbin && ln -sf rc mapcalc
 	@cd $(INSTALLDIR)/sbin && ln -sf rc v6plusd
+ifneq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000))
+	@cd $(INSTALLDIR)/sbin && ln -sf rc s46reset
 	@cd $(INSTALLDIR)/sbin && ln -sf rc ocnvcd
+endif #BUILD_NAME
 endif
 
 ifeq ($(RTCONFIG_WLCSCAN_RSSI),y)
@@ -1554,7 +1558,9 @@ ifeq ($(RTCONFIG_IG_SITE2SITE),y)
 endif
 
 ifeq ($(HND_ROUTER),y)
+ifneq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000))
 	@cd $(INSTALLDIR)/sbin && ln -sf rc gpy211_monitor
+endif #BUILD_NAME
 endif
 
 clean:
@@ -1983,10 +1989,13 @@ ifneq ($(wildcard ./prebuild/v6plusd.o),)
 v6plusd.o:
 	@-cp -f ./prebuild/v6plusd.o .
 endif
+ifneq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000))
 ifneq ($(wildcard ./prebuild/ocnvcd.o),)
 ocnvcd.o:
 	@-cp -f ./prebuild/ocnvcd.o .
 endif
+endif #BUILD_NAME
+
 endif
 ifeq ($(RTCONFIG_TPVPN),y)
 ifneq ($(wildcard ./prebuild/tpvpn.o),)
@@ -2016,11 +2025,12 @@ ig_s2s_client.o:
 endif
 endif
 
+ifneq ($(BUILD_NAME),$(filter $(BUILD_NAME), TUF-AX3000))
 ifneq ($(wildcard ./prebuild/gpy211_war.o),)
 gpy211_war.o:
 	@-cp -f ./prebuild/gpy211_war.o .
 endif
-
+endif #BUILD_NAME
 %.o: %.c
 	@echo " [rc] CC $@"
 	@$(CC) $(CFLAGS) -c $<
