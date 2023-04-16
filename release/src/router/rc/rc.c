@@ -1156,7 +1156,7 @@ static int rctest_main(int argc, char *argv[])
 			printf("%d\n", get_gpio(atoi(argv[2])));
 #endif
 		}
-#ifdef HND_ROUTER && !defined(TUFAX3000)
+#if defined(HND_ROUTER) && !defined(TUFAX3000)
 #if defined(RTCONFIG_BONDING) && defined(RTCONFIG_HND_ROUTER_AX)
 		else if (strcmp(argv[1], "get_bonding_port_status") == 0) {
 			int port = atoi(argv[2]);
@@ -3709,7 +3709,7 @@ void exe_eu_wa_rr(void){
 	sleep(1);
 	//_dprintf("%s\n",cmd_cc_ori);
 	system(cmd_cc_ori);
-	sleep(1);	
+	sleep(1);
 	//_dprintf("%s\n",cmd_up);
 	system(cmd_up);
 	sleep(1);
