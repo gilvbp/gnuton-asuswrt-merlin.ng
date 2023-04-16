@@ -18624,7 +18624,9 @@ int init_nvram2(void)
 	if (nvram_get("CoBrand") != NULL) {
 		amas_set_misc_info(MISC_INFO_COBRAND, nvram_safe_get("CoBrand"));
 	}
+#if !defined(TUFAX3000)
 	amas_set_misc_info(MISC_INFO_RCSUPPORT, get_rcSupport_count(amas_rc_count, sizeof(amas_rc_count)));
+#endif
 #endif /* AMAS */
 #endif /* CFGSYNC */
 #ifdef RTCONFIG_AMAS
