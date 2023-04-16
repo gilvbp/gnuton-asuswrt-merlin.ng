@@ -1143,20 +1143,20 @@ static int rctest_main(int argc, char *argv[])
 #endif
 #ifdef CONFIG_BCMWL5
 		else if (strcmp(argv[1], "gpiow") == 0) {
-#ifdef HND_ROUTER
+#ifdef HND_ROUTER && !defined(TUFAX3000)
 			if (argc>=4) set_gpio_rc(atoi(argv[2]), atoi(argv[3]));
 #else
 			if (argc>=4) set_gpio(atoi(argv[2]), atoi(argv[3]));
 #endif
 		}
 		else if (strcmp(argv[1], "gpior") == 0) {
-#ifdef HND_ROUTER
+#if defined(HND_ROUTER) && !defined(TUFAX3000)
 			printf("%d\n", get_gpio_rc(atoi(argv[2])));
 #else
 			printf("%d\n", get_gpio(atoi(argv[2])));
 #endif
 		}
-#ifdef HND_ROUTER
+#ifdef HND_ROUTER && !defined(TUFAX3000)
 #if defined(RTCONFIG_BONDING) && defined(RTCONFIG_HND_ROUTER_AX)
 		else if (strcmp(argv[1], "get_bonding_port_status") == 0) {
 			int port = atoi(argv[2]);

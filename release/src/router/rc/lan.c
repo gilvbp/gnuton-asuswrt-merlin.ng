@@ -4356,10 +4356,17 @@ lan_up(char *lan_ifname)
 #if defined(XT8PRO) || defined(BM68) || defined(XT8_V2) || defined(ET8PRO) || defined(ET8_V2)
 	_dprintf("[%s][%d] skip (GPY211)\n", __FUNCTION__, __LINE__);
 #else
+#if !defined(TUFAX3000)
 	if (nvram_get_int("re_mode") == 1 && nvram_get_int("gpy211_war")) {
 		_dprintf("[%s(%d)] GPY211 ANEG ...\n", __func__, __LINE__);
 		GPY211_WAR_ANEG();
 	}
+#else
+    if (nvram_get_int("re_mode") == 1) {
+		_dprintf("[%s(%d)] RE to do GPY211_INIT_SPEED ...\n", __func__, __LINE__);
+		GPY211_INIT_SPEED();
+	}
+#endif //TUFAX3000
 #endif
 #endif
 }
@@ -6416,17 +6423,28 @@ void start_lan_port(int dt)
 
 	strlcpy(lan_ifnames, nvram_safe_get("lan_ifnames"), sizeof(lan_ifnames));
 	foreach (word, lan_ifnames, next) {
-		if (!strcmp(word, GPY211_IFNAME)) {
+#if defined(TUFAX3000)
+		if (!strcmp(word, "eth0")) {
+#else
+        if (!strcmp(word, GPY211_IFNAME)) {
+#endif
 			gpy211_war = 1;
 			break;
 		}
 	}
 
 	/* add war for 2500BaseX speed issue */
-	if (gpy211_war && nvram_get_int("gpy211_war")) {
+#if defined(TUFAX3000)
+    if (gpy211_war) {
+		_dprintf("[%s(%d)] run GPY211_INIT_SPEED ...\n", __func__, __LINE__);
+		GPY211_INIT_SPEED();
+	}
+#else
+    if (gpy211_war && nvram_get_int("gpy211_war")) {
 		_dprintf("[%s(%d)] GPY211 ANEG ...\n", __func__, __LINE__);
 		GPY211_WAR_ANEG();
 	}
+#endif # TUFAX3000
 #endif
 #endif
 }

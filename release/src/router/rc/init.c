@@ -20945,7 +20945,7 @@ logmessage("ATE", "boot/continue fail= %d/%d\n", nvram_get_int("Ate_boot_fail"),
 			start_wan();
 
 /* separate from original workaround for XT8_V2 / XT9 etc. */
-#if !defined(XT8PRO) && !defined(BM68) && !defined(XT8_V2) && !defined(ET8PRO) && !defined(ET8_V2)
+#if !defined(XT8PRO) && !defined(BM68) && !defined(XT8_V2) && !defined(ET8PRO) && !defined(ET8_V2) && !defined(TUFAX3000)
 #ifdef RTCONFIG_HND_ROUTER_AX
 			start_gpy211_monitor();
 #endif
@@ -21334,7 +21334,9 @@ _dprintf("%s %d turnning on power on ethernet here\n", __func__, __LINE__);
 #if defined(RTCONFIG_HND_ROUTER_AX_6756)
 			sync_boot_state();
 #endif
+#if !defined(TUFAX3000)
 			misc_ctrl_post();
+#endif
 #ifdef RTCONFIG_REALTEK
 			if (nvram_match("Ate_power_on_off_enable", "0")) {	/* avoid run in test to let all led off */
 				if (sw_mode() == SW_MODE_REPEATER ||

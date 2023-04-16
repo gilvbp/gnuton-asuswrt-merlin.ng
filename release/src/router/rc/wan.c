@@ -3212,7 +3212,11 @@ int wan_hgw_detect(const int wan_unit, const char *wan_ifname, const char *prc)
 			S46_DBG("[CMD][%s]\n", cmd);
 			system(cmd);
 			system("ip route flush cache");
-			hgwret = s46_ntt_hgw(wan_unit);
+#if defined(TUFAX3000)
+			hgwret = s46_jpne_hgw();
+#else
+            hgwret = s46_ntt_hgw(wan_unit);
+#endif
 			/* Debug only */
 			if (nvram_get("s46_debug_hgwret")) {
 				S46_DBG("Using nvram s46_debug_hgwret val.\n");
