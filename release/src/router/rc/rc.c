@@ -1143,7 +1143,7 @@ static int rctest_main(int argc, char *argv[])
 #endif
 #ifdef CONFIG_BCMWL5
 		else if (strcmp(argv[1], "gpiow") == 0) {
-#ifdef HND_ROUTER && !defined(TUFAX3000)
+#if defined(HND_ROUTER) && !defined(TUFAX3000)
 			if (argc>=4) set_gpio_rc(atoi(argv[2]), atoi(argv[3]));
 #else
 			if (argc>=4) set_gpio(atoi(argv[2]), atoi(argv[3]));
