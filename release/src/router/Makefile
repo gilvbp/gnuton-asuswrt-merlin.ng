@@ -979,7 +979,10 @@ obj-y += rc
 obj-y += rom
 obj-y += others
 obj-y += libpasswd
-obj-y += httpd json-c libwebapi
+obj-y += httpd json-c
+ifeq ($(BUILD_NAME), $(filter $(BUILD_NAME), TUF-AX3000))
+obj-y += libwebapi
+endif
 obj-$(RTCONFIG_CALC_NVRAM) += calc_nvram
 obj-$(RTCONFIG_VISUALIZATION) += sqlite3 json-c libxml2 visdcoll visdcon
 obj-y += www
@@ -2857,7 +2860,7 @@ infosvr: shared $(if $(BCM_502L07P2),ethctl_lib) nvram${BCMEX}$(EX7)
 infosvr-install:
 	$(MAKE) -C infosvr INSTALLDIR=$(INSTALLDIR)/infosvr install
 
-httpd: shared $(if $(BCM_502L07P2),ethctl_lib) nvram$(BCMEX)$(EX7) rc libdisk $(if $(RTCONFIG_HTTPS),mssl) $(if $(RTCONFIG_BWDPI),bwdpi_source) json-c $(if $(RTCONFIG_CFGSYNC), $(CFGSYNC_PKG)) libpasswd libwebapi $(if $(RTCONFIG_DNSQUERY_INTERCEPT), dnsqd)
+httpd: shared $(if $(BCM_502L07P2),ethctl_lib) nvram$(BCMEX)$(EX7) rc libdisk $(if $(RTCONFIG_HTTPS),mssl) $(if $(RTCONFIG_BWDPI),bwdpi_source) json-c $(if $(RTCONFIG_CFGSYNC), $(CFGSYNC_PKG)) libpasswd $(if $(TUFAX3000),libwebapi) $(if $(RTCONFIG_DNSQUERY_INTERCEPT), dnsqd)
 
 	@$(SEP)
 ifeq ($(HND_ROUTER),y)
