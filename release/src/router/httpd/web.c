@@ -194,7 +194,10 @@ static void do_jffsupload_post(char *url, FILE *stream, int len, char *boundary)
 #if 0 // obsoleted, RTCONFIG_RGBLED
 #include <aura_rgb.h>
 #endif
+
+#if !defined(TUFAX3000)
 #include <webapi.h>
+#endif
 
 #ifdef RTCONFIG_HTTPS
 #include <openssl/x509.h>
