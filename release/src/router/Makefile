@@ -2876,6 +2876,7 @@ endif
 httpd-install:
 	$(MAKE) -C httpd INSTALLDIR=$(INSTALLDIR)/httpd install
 
+ifeq ($(TUFAX3000),y)
 libwebapi-dep:json-c $(if $(RTCONFIG_BWDPI),bwdpi_source)
 
 libwebapi/stamp-h1:
@@ -2895,6 +2896,7 @@ libwebapi-clean:
 	@$(SEP)
 	@$(MAKE) -C libwebapi clean
 	rm -rf libwebapi/stamp-h1
+endif #TUFAX3000
 
 httpd_uam: shared $(if $(BCM_502L07P2),ethctl_lib) nvram$(BCMEX)$(EX7) libdisk $(if $(RTCONFIG_HTTPS),mssl) $(if $(RTCONFIG_FBWIFI),fb_wifi)
 	@$(SEP)
