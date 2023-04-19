@@ -351,8 +351,10 @@ CFLAGS += -I$(TOP)/libasuslog
 LIBS += -L$(TOP)/libasuslog -lasuslog
 endif
 
+ifneq ($(TUFAX3000),y)
 CFLAGS += -I$(TOP)/libwebapi
 LIBS += -L$(TOP)/libwebapi -lwebapi
+endif
 
 all: httpd #test_apps
 
