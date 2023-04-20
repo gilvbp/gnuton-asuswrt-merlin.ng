@@ -17261,6 +17261,60 @@ err:
 
 	fcntl(fileno(stream), F_SETOWN, -ret);
 }
+#if defined(TUFAX3000)
+static void
+do_upload_server_ipsec_cert_cgi(char *url, FILE *stream)
+{
+	if (nvram_get_int("upload_server_ipsec_cert_temp")) {
+		char cmd[1024];
+		memset(cmd, 0, sizeof(cmd));
+		if (check_if_dir_exist(IPSEC_UPLOAD_FLODER)) {
+			if(check_if_file_exist(IPSEC_UPLOAD_FILE)) {
+				int i;
+				char file_path[128];
+				char *lists[] = {
+					"asusCert.der",
+					"asusCert.pem",
+					"ca.pem",
+					"ca_init.sh",
+					"generate.sh",
+					"svrCert.pem",
+					"svrKey.pem",
+					NULL
+				};
+				snprintf(cmd, sizeof(cmd), "tar -xzf %s -C %s", IPSEC_UPLOAD_FILE, IPSEC_UPLOAD_FLODER);
+				system(cmd);
+
+				for (i = 0; i < ARRAY_SIZE(lists) && lists[i] != NULL; ++i) {
+					memset(file_path, 0, sizeof(file_path));
+					snprintf(file_path, sizeof(file_path), "%s/%s", IPSEC_UPLOAD_FLODER, lists[i]);
+					if(check_if_file_exist(file_path)) {
+						eval("mv", "-f", file_path, JFFS_CA_FILES);
+					}
+				}
+				notify_rc("ipsec_restart");
+				if(check_user_agent(user_agent) != FROM_BROWSER)
+					websWrite(stream, "{\"statusCode\":\"%d\"}", HTTP_OK);
+
+			}
+			else {
+				if(check_user_agent(user_agent) != FROM_BROWSER)
+					websWrite(stream, "{\"statusCode\":\"%d\"}", HTTP_FAIL);
+			}
+		}
+		else {
+			if(check_user_agent(user_agent) != FROM_BROWSER)
+				websWrite(stream, "{\"statusCode\":\"%d\"}", HTTP_FAIL);
+		}
+	}
+	else {
+		if(check_user_agent(user_agent) != FROM_BROWSER)
+			websWrite(stream, "{\"statusCode\":\"%d\"}", HTTP_FAIL);
+	}
+	nvram_unset("upload_server_ipsec_cert_temp");
+	doSystem("rm -rf %s", IPSEC_UPLOAD_FLODER);
+}
+#else
 static void
 do_upload_server_ipsec_cert_cgi(char *url, FILE *stream)
 {
@@ -17279,6 +17333,7 @@ do_server_ipsec_file(char *url, FILE *stream)
 		unlink(IPSEC_EXPORT_FILE);
 	}
 }
+#endif
 
 #ifdef RTCONFIG_INSTANT_GUARD
 void
@@ -25117,7 +25172,9 @@ struct mime_handler mime_handlers[] = {
 	{ "get_ipsec_profile.cgi*", "text/html", no_cache_IE7, do_html_post_and_get, do_get_ipsec_profile_cgi, do_auth },
 	{ "set_ipsec_profile.cgi*", "text/html", no_cache_IE7, do_html_post_and_get, do_set_ipsec_profile_cgi, do_auth },
 	{ "upload_server_ipsec_cert.cgi*", "text/html", no_cache_IE7, do_upload_server_ipsec_cert_post, do_upload_server_ipsec_cert_cgi, do_auth },
+#ifndef TUFAX3000
 	{ "server_ipsec.cert", "application/x-x509-ca-cert", NULL, do_html_post_and_get, do_server_ipsec_file, do_auth },
+#endif
 #ifdef RTCONFIG_INSTANT_GUARD
 	{ "get_IG_pre_shared_key.cgi*", "text/html", no_cache_IE7, do_html_post_and_get, do_get_IG_pre_shared_key_cgi, do_auth },
 	{ "get_ig_config.cgi*", "text/html", no_cache_IE7, do_html_post_and_get, do_get_ig_config_cgi, do_auth },

@@ -212,6 +212,23 @@ struct wl_sync_nvram {
 #define IPSEC_UPLOAD_FLODER     "/tmp/server_ipsec_file"
 #define IPSEC_UPLOAD_FILE       "/tmp/server_ipsec_file/server_ipsec.tgz"
 #endif
+#if defined(TUFAX3000)
+#define PROFILE_HEADER  "HDR1"
+#ifdef RTCONFIG_DSL
+#define PROFILE_HEADER_NEW      "N55U"
+#else
+#ifdef RTCONFIG_QCA
+#define PROFILE_HEADER_NEW      "AC55U"
+#elif defined(RTCONFIG_LANTIQ)
+#define PROFILE_HEADER_NEW      "BLUE"
+#else
+#define PROFILE_HEADER_NEW      "HDR2"
+#endif # RTCONFIG_QCA/RTCONFIG_LANTIQ
+#endif #RTCONFIG_DSL
+#define IH_MAGIC        0x27051956      /* Image Magic Number           */
+#define BLACKLIST_CONFIG_FILE "/tmp/blacklist_config.json"
+#define SAVE_CONFIG_SYNC_FILE "/tmp/save_config_sync.json"
+#endif #TUFAX3000
 
 #define CRC_LEN 8
 
@@ -637,7 +654,11 @@ extern void replace_char(char *str, char find, char replace);
 extern void reg_default_final_token();
 extern int captcha_on();
 extern void do_webdavInfo_asp(char *url, FILE *stream);
+#if defined(TUFAX3000)
+extern int get_wl_nband_list();
+#else
 extern int gen_wl_nband_array();
+#endif
 extern void do_get_cta_info_cgi(char *url, FILE *stream);
 extern void do_upload_config_sync_post(char *url, FILE *stream, int len, char *boundary);
 extern void do_upload_config_sync_cgi(char *url, FILE *stream);
@@ -654,5 +675,9 @@ extern void store_file_var(char *login_url, char *file);
 extern int get_active_wan_unit(void);
 extern int last_time_lock_warning(void);
 extern int check_lock_status(time_t *dt);
+#if defined(TUFAX3000)
+extern char *wl_nband_to_wlx(char *nv_name, char *wl_name, size_t len);
+#else
 extern void check_lock_state();
+#endif
 #endif /* _httpd_h_ */
