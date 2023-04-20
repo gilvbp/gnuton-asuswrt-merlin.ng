@@ -17971,8 +17971,7 @@ do_deleteOfflineClient_cgi(char *url, FILE *stream)
 	deleteOfflineClient(stream, NULL, NULL, 0, url, NULL, NULL);
 
 }
-
-
+#if !defined(TUFAX3000)
 static void
 do_upload_jffs_profile_post(char *name, char *url, FILE *stream, int len, char *boundary)
 {
@@ -18065,6 +18064,7 @@ err:
 
 	fcntl(fileno(stream), F_SETOWN, -ret);
 }
+#endif
 
 #ifdef RTCONFIG_NETOOL
 static void
