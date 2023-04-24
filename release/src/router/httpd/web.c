@@ -15644,6 +15644,13 @@ do_upload_cgi(char *url, FILE *stream)
 }
 
 #ifdef RTCONFIG_OPENVPN
+#if defined(TUFAX3000)
+#define VPN_CLIENT_UPLOAD	"/tmp/openvpn_file"
+#define JFFS_OPENVPN		"/jffs/openvpn/"
+#define OPENVPN_EXPORT_FILE	"/tmp/server_ovpn.cert"
+#define OPENVPN_UPLOAD_FLODER	"/tmp/server_ovpn_file"
+#define OPENVPN_UPLOAD_FILE	"/tmp/server_ovpn_file/server_ovpn.tgz"
+#endif //TUFAX3000
 
 static void
 do_vpnupload_post(char *url, FILE *stream, int len, char *boundary)
