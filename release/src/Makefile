@@ -27,7 +27,7 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-
+export PARALLEL_BUILD := -j$(shell grep -c '^processor' /proc/cpuinfo)
 export SRCBASE := $(shell pwd)
 RELEASEDIR := $(shell (cd $(SRCBASE)/.. && pwd -P))
 PATH := $(RELEASEDIR)/tools:$(PATH)
@@ -73,9 +73,9 @@ all: rt_ver
 	@echo ""
 
 	@-mkdir image
-	@$(MAKE) -C router all
-	@$(MAKE) -C router install
-	@$(MAKE) -C btools
+	@$(MAKE) $(PARALLEL_BUILD) -C router all
+	@$(MAKE) $(PARALLEL_BUILD) -C router install
+	@$(MAKE) $(PARALLEL_BUILD) -C btools
 
 	@rm -f image/$(BUILD_NAME)_$(KERNEL_VER).$(FS_VER).trx
 	
