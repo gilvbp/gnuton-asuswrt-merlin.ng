@@ -91,7 +91,7 @@ clean:
 	@touch router/.config
 	@rm -f router/config_[a-z]
 	@rm -f router/busybox/config_[a-z]
-	@$(MAKE) $(PARALLEL_BUILD) -C router $@
+	@$(MAKE) -C router $@
 	@rm -rf router/mipsel-uclibc 
 
 cleanimage:
@@ -103,7 +103,7 @@ cleanimage:
 
 cleantools:
 	@$(MAKE) -C $(LINUXDIR)/scripts/squashfs clean
-	@$(MAKE) $(PARALLEL_BUILD) -C btools clean
+	@$(MAKE) -C btools clean
 
 cleankernel:
 	@cd $(LINUXDIR) && \
