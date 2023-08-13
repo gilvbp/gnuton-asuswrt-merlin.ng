@@ -68,13 +68,13 @@ rt_ver:
 
 all: rt_ver
 	@echo ""
-	@echo "Building $(BUILD_NAME)_$(KERNEL_VER).$(FS_VER).trx"
+	@echo "Building parallel $(PARALLEL_BUILD) $(BUILD_NAME)_$(KERNEL_VER).$(FS_VER).trx"
 	@echo ""
 	@echo ""
 
 	@-mkdir image
 	@$(MAKE) $(PARALLEL_BUILD) -C router all
-	@$(MAKE) $(PARALLEL_BUILD) -C router install
+	@$(MAKE) -C router install
 	@$(MAKE) $(PARALLEL_BUILD) -C btools
 
 	@rm -f image/$(BUILD_NAME)_$(KERNEL_VER).$(FS_VER).trx
@@ -91,7 +91,7 @@ clean:
 	@touch router/.config
 	@rm -f router/config_[a-z]
 	@rm -f router/busybox/config_[a-z]
-	@$(MAKE) -C router $@
+	@$(MAKE) $(PARALLEL_BUILD) -C router $@
 	@rm -rf router/mipsel-uclibc 
 
 cleanimage:
@@ -103,7 +103,7 @@ cleanimage:
 
 cleantools:
 	@$(MAKE) -C $(LINUXDIR)/scripts/squashfs clean
-	@$(MAKE) -C btools clean
+	@$(MAKE) $(PARALLEL_BUILD) -C btools clean
 
 cleankernel:
 	@cd $(LINUXDIR) && \
