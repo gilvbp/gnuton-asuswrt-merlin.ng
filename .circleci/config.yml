@@ -92,7 +92,7 @@ jobs:
               sed -i 's/TUF_UI=n/TUF_UI=y/' ${PROJECT_DIR}/release/src-rt/target.mak
             fi
             echo "----- BUILD -----"
-            make ${MODEL} | tee "/tmp/build.log"
+            make -j4 ${MODEL} | tee "/tmp/build.log"
             echo "------ DONE -----"
       - run:
           name: Prepare workspace
