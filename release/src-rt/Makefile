@@ -712,17 +712,17 @@ endif
 ifeq ($(HND_ROUTER),y)
 	@rm -rf image
 	@ln -sf targets/${PROFILE} image
-	$(MAKE) buildimage
+	$(MAKE) -j4 buildimage
 	@rm -rf targets/${PROFILE}/*cferom*
 else
 	@-mkdir -p image
 
-	$(MAKE) -C router all
+	$(MAKE) -j4 -C router all
 ifneq ($(PLATFORM_ROUTER),)
-	$(MAKE) -C $(PLATFORM_ROUTER) all
-	$(MAKE) -C $(PLATFORM_ROUTER) install
+	$(MAKE) -j4 -C $(PLATFORM_ROUTER) all
+	$(MAKE) -j4 -C $(PLATFORM_ROUTER) install
 endif
-	$(MAKE) -C router install
+	$(MAKE) -j4 -C router install
 
 	@$(MAKE) image
 endif
