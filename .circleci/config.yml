@@ -9,6 +9,9 @@ jobs:
           name: Get code
           shell: /bin/bash
           command: |
+            mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            git config --global protocol.version 2
+            git config --global http.maxConnections 10
             git clone --depth 1 --branch $CIRCLE_BRANCH  $CIRCLE_REPOSITORY_URL
             pwd
             ls
