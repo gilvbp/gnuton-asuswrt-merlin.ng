@@ -5,12 +5,11 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - checkout
       - run:
           name: Get code
           shell: /bin/bash
           command: |
-            #git clone --depth 1 --branch $CIRCLE_BRANCH  $CIRCLE_REPOSITORY_URL
+            git clone --depth 1 --branch $CIRCLE_BRANCH  $CIRCLE_REPOSITORY_URL
             pwd
             ls
             rm -Rf .git
